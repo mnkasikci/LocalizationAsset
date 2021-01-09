@@ -6,13 +6,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Add the script of this class (LocalizationText.cs) to a text which should be localized
+/// Add this script to a UI text component which should be localized.
 /// </summary>
 public class LocalizeUIText : MonoBehaviour
 {
-    [Tooltip("Add the Scripts/ Scriptable Objects/ Game object Components which have the property / field you want to be shown. Enter the Property/Field names by the order to be shown in text.  For the values which are not strings, .ToString() values will be used.")]
-    [SerializeField] private DynamicParts DynamicParts = default;
+    [Space]
+    [Tooltip("This key will be used to retrieve the localized text from the relevant language file.")]
     [SerializeField] private string key;
+    [Space]
+    [Tooltip("This is only necessary if you want to include variables in the localized text, otherwise leave this list empty. " +
+        "Variable markup like '{0}' in the localized text will be replaced with these variables in the same order. " +
+        "For each variable, you should provide its source and name.")]
+    [SerializeField] private DynamicVariables variables = default;
+
     public void OnEnable()
     {
         try { GetTranslatedText(); }
@@ -35,16 +41,13 @@ public class LocalizeUIText : MonoBehaviour
             ((TextMeshProUGUI)textComp).text = text;
         else
             ((Text)textComp).text = text;
-
     }
 
     private void GetTranslatedText()
     {
-
         string text = dpForCode != null ? LocalizationManager.Instance.GetLocalizedValue(key, dpForCode) :
-            LocalizationManager.Instance.GetLocalizedValue(key, DynamicParts);
+            LocalizationManager.Instance.GetLocalizedValue(key, variables);
         AssignText(text);
-
     }
 
     public void InspectorCreatedUpdate()
@@ -67,16 +70,16 @@ public class LocalizeUIText : MonoBehaviour
         }
         if (dpForCode != null)
         {
-            if (a.Length != dpForCode.DynamicVariables.Count)
+            if (a.Length != dpForCode.dynamicVariables.Count)
             {
                 Debug.LogError("Inconsistent number of variables sent to update." +
-                    "You created this localized text with " + dpForCode.DynamicVariables.Count +
+                    "You created this localized text with " + dpForCode.dynamicVariables.Count +
                     " variables but you provided " + a.Length +
                     " variables to update.\n This text will not be updated");
                 return;
             }
             for (int i = 0; i < a.Length; i++)
-                dpForCode.DynamicVariables[i] = a[i];
+                dpForCode.dynamicVariables[i] = a[i];
         }
         GetTranslatedText();
     }
@@ -84,7 +87,7 @@ public class LocalizeUIText : MonoBehaviour
     public void SetDynamicVariables(List<object> DynamicVariables)
     {
         this.dpForCode = new DynamicVarsForCode();
-        this.dpForCode.DynamicVariables = DynamicVariables;
+        this.dpForCode.dynamicVariables = DynamicVariables;
     }
 
     public void SetKey(string key) => this.key = key;
@@ -93,25 +96,26 @@ public class LocalizeUIText : MonoBehaviour
     private bool isCreatedByCode;
     public bool SetCodeCreated() => this.isCreatedByCode = true;
     #endregion
-
 }
 
 [Serializable]
-public class DynamicParts
+public class DynamicVariables
 {
-    public List<DynamicPartInLocalizedText> dynamicPartList;
+    public List<DynamicVariableInLocalizedText> list;
 }
 
 [Serializable]
-public class DynamicPartInLocalizedText
+public class DynamicVariableInLocalizedText
 {
-    public UnityEngine.Object script;
-    public string VariableName;
+    [Tooltip("The source can be a script that implements the singleton pattern, a scriptable object, or a gameobject component. ")]
+    public UnityEngine.Object variableSource;
+    [Tooltip("Name of the property or the field should be written exactly as it is in the source.")]
+    public string variableName;
 }
 
 public class DynamicVarsForCode
 {
-    public List<object> DynamicVariables;
+    public List<object> dynamicVariables;
 }
 
 public static class LocalizationTextCreator

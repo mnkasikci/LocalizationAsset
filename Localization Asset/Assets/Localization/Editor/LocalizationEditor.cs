@@ -17,25 +17,24 @@ public class LocalizationEditor : EditorWindow
         GetWindow(typeof(LocalizationEditor)).Show();
     }
 
-
     void OnGUI()
-    {   
+    {
         if (localizationData != null)
         {
             EditorGUILayout.BeginHorizontal("Box");
-            
+
             EditorGUILayout.LabelField("Search: ", EditorStyles.boldLabel, GUILayout.MaxWidth(100));
             searchValue = EditorGUILayout.TextField(searchValue);
             if (GUILayout.Button("Add New Item", GUILayout.MaxWidth(100)))
                 LocalizationAddItemWindow.Open();
-            
+
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
             DrawSeparator();
             EditorGUILayout.Space();
 
-            if (searchValue == string.Empty  && localizationData.items.Count > 0)
+            if (searchValue == string.Empty && localizationData.items.Count > 0)
             {
                 EditorGUILayout.BeginVertical();
                 scroll = EditorGUILayout.BeginScrollView(scroll);
@@ -103,9 +102,9 @@ public class LocalizationEditor : EditorWindow
         if (GUILayout.Button("Load"))
             LoadLocalizationData();
 
-        if (GUILayout.Button("Create"))
+        if (GUILayout.Button("Create New"))
             CreateNewLocalizationData();
-        
+
         GUILayout.EndHorizontal();
 
         minSize = new Vector2(360, 500);
@@ -171,14 +170,13 @@ public class LocalizationEditor : EditorWindow
         {
             string dataAsJson = File.ReadAllText(openedFilePath);
             localizationData = JsonUtility.FromJson<LocalizationData>(dataAsJson);
-            // EditorUtility.DisplayDialog("Load Localization Data File", "Successfully loaded the localization file.", "Okay!");
             SyncWithLocalizationEditorHelper();
         }
     }
 
     public void SyncWithLocalizationEditorHelper()
     {
-        
+
         LocalizationEditorHelper.localizedText = new Dictionary<string, string>();
         foreach (LocalizationItem item in localizationData.items)
             LocalizationEditorHelper.localizedText.Add(item.key, item.value);
@@ -186,7 +184,7 @@ public class LocalizationEditor : EditorWindow
 
     void SaveLocalizationData()
     {
-        if(!string.IsNullOrEmpty(openedFilePath))
+        if (!string.IsNullOrEmpty(openedFilePath))
         {
             string dataAsJson = JsonUtility.ToJson(localizationData);
             File.WriteAllText(openedFilePath, dataAsJson);
@@ -214,7 +212,6 @@ public class LocalizationEditor : EditorWindow
         localizationData = new LocalizationData();
         localizationData.items = new List<LocalizationItem>();
         LocalizationEditorHelper.localizedText = new Dictionary<string, string>();
-        // EditorUtility.DisplayDialog("Create Localization Data File", "Successfully created a new localization file.", "OK");
     }
     #endregion
 
@@ -259,7 +256,7 @@ public class LocalizationEditor : EditorWindow
 
     void OnDestroy()
     {
-        if(localizationData != null)
+        if (localizationData != null)
             UnsavedChanges();
     }
 }

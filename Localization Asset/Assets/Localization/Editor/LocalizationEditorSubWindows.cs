@@ -96,7 +96,6 @@ public class LocalizationAddItemWindow : EditorWindow
         {
             EditorUtility.DisplayDialog("Load Localization Data File", "Please load a localization data file first.", "OK");
             GetWindow<LocalizationEditor>().LoadLocalizationData();
-            // TODO: Solve the "InvalidOperationException: Stack empty." error
         }
 
         LocalizationAddItemWindow window = CreateInstance<LocalizationAddItemWindow>();
