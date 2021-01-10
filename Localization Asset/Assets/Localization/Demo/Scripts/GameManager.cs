@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log(CultureInfo.CurrentCulture.NativeName);
+
         StartCoroutine(LoadFirstScene("Actual Scene"));
     }
 
