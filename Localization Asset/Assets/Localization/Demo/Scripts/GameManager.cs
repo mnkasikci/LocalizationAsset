@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,7 +28,7 @@ public class GameManager : MonoBehaviour
     IEnumerator LoadFirstScene(string sceneName)
     {
         // Wait for a frame if the LocalizationManager is not ready yet
-        while (LocalizationManager.Instance.IsReady == false) 
+        while (LocalizationManager.Instance.IsReady == false)
             yield return null;
 
         // Once the LocalizationManager is ready, load the scene

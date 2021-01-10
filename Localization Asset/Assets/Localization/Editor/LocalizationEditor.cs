@@ -20,8 +20,14 @@ public class LocalizationEditor : EditorWindow
 
     void OnGUI()
     {
+        GUIStyle alignCenterStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter };
+
         if (localizationData != null)
         {
+            EditorGUILayout.BeginHorizontal("Box");
+            EditorGUILayout.LabelField("Selected Language File: " + GetLanguageTagFromPath(openedFilePath), alignCenterStyle);
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.BeginHorizontal("Box");
 
             EditorGUILayout.LabelField("Search: ", EditorStyles.boldLabel, GUILayout.MaxWidth(100));
@@ -112,6 +118,13 @@ public class LocalizationEditor : EditorWindow
         maxSize = new Vector2(640, 500);
     }
 
+    string GetLanguageTagFromPath(string path)
+    {
+        int lastPathIndex = path.LastIndexOf('/');
+        int extensionIndex = path.LastIndexOf('.');
+        return path.Substring(lastPathIndex + 1, extensionIndex - lastPathIndex - 1);
+    }
+
     #region Localization Item Methods
     public void AddLocalizationItem(string key, string value)
     {
@@ -155,7 +168,7 @@ public class LocalizationEditor : EditorWindow
     {
         if (localizationData.items.Any(f => f.key == key))
             return true;
-        else 
+        else
             return false;
     }
     #endregion

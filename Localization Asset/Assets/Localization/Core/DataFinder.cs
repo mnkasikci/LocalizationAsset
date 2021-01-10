@@ -37,20 +37,20 @@ public static class DataFinder
 
             throw new LocalizationException("The script " + Script.name + " doesn't have a singleton (No Property called \"Instance\" or \"instance\". )\n");
         }
-        else if (ScriptorcomponentorSO is ScriptableObject) 
+        else if (ScriptorcomponentorSO is ScriptableObject)
         {
             ScriptableObject scriptableObject = (ScriptableObject)ScriptorcomponentorSO;
             type = scriptableObject.GetType();
             return GetPropertyorField(scriptableObject, type, Name);
         }
         else if (ScriptorcomponentorSO is Component)
-        { 
+        {
             Component component = (Component)ScriptorcomponentorSO;
             type = component.GetType();
             return GetPropertyorField(component, type, Name);
         }
-        throw new LocalizationException("The dragged component \"" + ScriptorcomponentorSO.name+ "\" is neither a component nor a SO nor a Script");
-        
+        throw new LocalizationException("The dragged component \"" + ScriptorcomponentorSO.name + "\" is neither a component nor a SO nor a Script");
+
     }
 
     private static object GetPropertyorField(UnityEngine.Object component, Type type, string Name)
@@ -74,7 +74,7 @@ public static class DataFinder
 
     public static IReadOnlyList<Type> GetSubClasses<T>() where T : class
     {
-        
+
         return typeof(T).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(T))).ToList();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,24 +52,26 @@ public class LocalizeUIText : MonoBehaviour
 
     private void GetTranslatedText()
     {
-        
-        string text = 
+
+        string text =
             this.isCreatedByCode ? LocalizationManager.Instance.LocalizeThroughComponent(key, dpForCode) :
                                     LocalizationManager.Instance.LocalizeThroughComponent(key, variables);
 
-        
+
         AssignText(text);
     }
 
-
-    
-
     #region CreatedByCode
+    /// <summary>
+    /// If you are updating a LocalizeUIText component that you created in the inspector, you do not need to give any parameters.
+    /// However, if you are updating a LocalizeUIText component that was created on runtime with LocalizationManager.AddLocalizeUIText(), 
+    /// then you will need to provide the relevant variables.
+    /// </summary>
     public void UpdateText(params object[] a)
     {
         if (!this.isCreatedByCode)
         {
-            if(a.Length!=0)
+            if (a.Length != 0)
             {
                 Debug.LogError("Since this LocalizeUIText component is created via Inspector, you shouldn't send parameters (because parameters are already set in the inspector)" +
                     "The parameters you sent will be disregarded");
@@ -129,5 +130,5 @@ public class DynamicVarsForCode
 
 public static class LocalizationTextCreator
 {
-    
+
 }
