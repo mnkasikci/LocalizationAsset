@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         // Wait for a frame if the LocalizationManager is not ready yet
         while (LocalizationManager.Instance.IsReady == false) 
             yield return null;
-        
+
         // Once the LocalizationManager is ready, load the scene
         SceneManager.LoadScene(sceneName);
     }

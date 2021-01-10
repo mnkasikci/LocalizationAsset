@@ -36,17 +36,22 @@ public class LocalizationManager : MonoBehaviour
         "For instance, use 'en-US' for American English and 'en-GB' for British English. " +
         "Remember that a language file with the exact same name should exist in the languages folder.")]
     [SerializeField] private string mainLanguageTag;
+
+
     private string chosenCultureName;
     [Header("File Paths")]
     [Tooltip("Language file will be retrieved from this folder. The path is relative to your Assets " +
         "folder. So 'Languages' means 'Assets/Languages'. Do not start the path with '/' because" +
         "then the path will not be relative to your Assets folder.")]
-    [SerializeField] private string languagesFolder;
-    // TODO: Make this relative to assets folder
+    [SerializeField] private string LanguageFolder;
+    private string fullLanguageFolder;
+    
     [Tooltip("When another script requests the localized text for a key and Localization Manager cannot find that value," +
         "it will log these keys to this folder so that you can see which keys were missing / not translated for that language.")]
-    [SerializeField] private string missingKeysFolder;
+    [SerializeField] private string MissingKeysFolder;
+    private string fullMissingKeysFolder;
     
+
     private LocalizationHandler localizationHandler = new LocalizationHandler();
     private List<CultureData> allCultures;
 
@@ -63,7 +68,7 @@ public class LocalizationManager : MonoBehaviour
     [MenuItem("Tools/Localization/Create New Language File with Used Keys (Play Mode Only)")]
     public static void CreateNewLanguageFileWithUsedKeys()
     {
-        string filePath = Path.Combine(Instance.missingKeysFolder, "EmptyDictionary.json");
+        string filePath = Path.Combine(Instance.fullMissingKeysFolder, "EmptyDictionary.json");
         LocalizationData localizationData = new LocalizationData { items = new List<LocalizationItem>() };
         foreach (var key in Instance.allKeys) localizationData.items.Add(new LocalizationItem() { key = key, value = "" });
         string jsonString = JsonUtility.ToJson(localizationData);
@@ -82,13 +87,17 @@ public class LocalizationManager : MonoBehaviour
 
     public async void Start()
     {
+        
         await StartupLanguageActionsAsync();
         IsReady = true;
     }
 
     public async Task StartupLanguageActionsAsync()
     {
-        GetAvailableLanguageFiles();
+        fullLanguageFolder = Path.Combine(Application.dataPath, LanguageFolder);
+        fullMissingKeysFolder= Path.Combine(Application.dataPath, MissingKeysFolder);
+
+    GetAvailableLanguageFiles();
         
         try
         {
@@ -110,7 +119,7 @@ public class LocalizationManager : MonoBehaviour
     }
 
     /// <summary>
-    /// If this method is being called, it means one of the language index is -1
+    /// If this method is being called, it means one of the language files is broken
     /// </summary>
     private async Task ReConstructLanguages()
     {
@@ -126,7 +135,7 @@ public class LocalizationManager : MonoBehaviour
                 }
         if (allCultures[mainLanguageIndex].IsBroken)
                 throw new LocalizationException("All of the language files were corrupted." +
-                    "Please check the languages and restart the application", languagesFolder);
+                    "Please check the languages and restart the application", fullLanguageFolder);
         if (allCultures[systemLanguageIndex].IsBroken)
         {
             if (Instance.debugging) Debug.LogWarning("Because the set system language (" + allCultures[systemLanguageIndex].culture.Name + 
@@ -149,7 +158,7 @@ public class LocalizationManager : MonoBehaviour
     private async Task<bool> SaveAllMissingKeys()
     {
         if (allCultures == null) return false;
-        Directory.CreateDirectory(missingKeysFolder);
+        Directory.CreateDirectory(fullMissingKeysFolder);
 
         List<Task> filesToWrite = new List<Task>();
 
@@ -164,7 +173,7 @@ public class LocalizationManager : MonoBehaviour
                 localizationData.items.Add(new LocalizationItem() { key = key, value = "" });
 
             string jsonString = JsonUtility.ToJson(localizationData);
-            string missingKeysPath = Path.Combine(missingKeysFolder, item.culture.Name + ".json");
+            string missingKeysPath = Path.Combine(fullMissingKeysFolder, item.culture.Name + ".json");
             File.WriteAllText(missingKeysPath, jsonString);
 
             StreamWriter sw = new StreamWriter(missingKeysPath);
@@ -179,13 +188,16 @@ public class LocalizationManager : MonoBehaviour
     {
         await SaveAllMissingKeys();
     }
-
+    /// <summary>
+    /// Checks whether main, system and current langauge files are broken and reconstructs the choices.
+    /// <para>If it is impossible to reconstruct, throws an error.</para>
+    /// </summary>
     public async Task ChooseLanguagesAsync()
     {
         try
         {
             if (!allCultures.Exists(c => c.culture.Name == mainLanguageTag))
-                throw new LocalizationException("Couldn't find main language (" + mainLanguageTag + ".json)\n" + "First available language will be set as the main language", languagesFolder);
+                throw new LocalizationException("Couldn't find main language (" + mainLanguageTag + ".json)\n" + "First available language will be set as the main language", fullLanguageFolder);
             mainLanguageIndex = allCultures.FindIndex(c => c.culture.Name == mainLanguageTag);
 
             if (Instance.debugging) Debug.Log("Language " + allCultures[mainLanguageIndex].culture.Name + " was successfully found");
@@ -198,7 +210,10 @@ public class LocalizationManager : MonoBehaviour
 
         systemLanguageIndex = GetClosestToSystemLanguage();
         if (systemLanguageIndex == -1) systemLanguageIndex = mainLanguageIndex;
-
+        if (PlayerPrefs.HasKey("chosenLanguage"))
+        {
+            chosenCultureName = PlayerPrefs.GetString("chosenLanguage");
+        }
         string temp = chosenCultureName;
         currentLanguageIndex = temp == "" ? systemLanguageIndex : allCultures.FindIndex(c => c.culture.Name == temp);
 
@@ -213,18 +228,29 @@ public class LocalizationManager : MonoBehaviour
         await MakeLanguageAvailable(mainLanguageIndex, systemLanguageIndex, currentLanguageIndex);
     }
 
-    /// <summary>
-    /// Checks whether main, system and current langauge files are broken and reconstructs the choices.
-    /// <para>If it is impossible to reconstruct, throws an error.</para>
-    /// </summary>
+
     private async Task ChooseLanguage(int newLanguageIndex)
     {
         Task MLA = MakeLanguageAvailable(newLanguageIndex);
-        chosenCultureName = allCultures[newLanguageIndex].culture.Name;
-        await MLA;
-        currentLanguageIndex = newLanguageIndex;
-        OnLanguageChanged.Invoke() ;
-        localizationHandler.ConstructPriorityList();
+       
+        try
+        {
+            await MLA;
+            currentLanguageIndex = newLanguageIndex;
+            localizationHandler.ConstructPriorityList();
+            chosenCultureName = allCultures[newLanguageIndex].culture.Name;
+            PlayerPrefs.SetString("chosenLanguage", chosenCultureName);
+
+
+            OnLanguageChanged.Invoke();
+            
+            
+        }
+        catch
+        {
+            Debug.LogError("The langauge file is broken and couldn't be loaded. Language was not changed ");
+        }
+        
     }
 
     /// <summary>
@@ -248,8 +274,7 @@ public class LocalizationManager : MonoBehaviour
     public async Task ChooseLanguage(string languageTag)
     {
         int index = allCultures.IndexOf(allCultures.Find(f => f.culture.Name == languageTag));
-        if (index == -1) Debug.LogError("The given culture name could not be found in the available " +
-            "languages. Either there is no language file or the language file is corrupted.");
+        if (index == -1) Debug.LogError("The given culture name could not be found in the available languages.");
 
         await ChooseLanguage(index);
     }
@@ -315,7 +340,7 @@ public class LocalizationManager : MonoBehaviour
 
     public void GetAvailableLanguageFiles()
     {
-        DirectoryInfo directoryinfo = new DirectoryInfo(languagesFolder);
+        DirectoryInfo directoryinfo = new DirectoryInfo(fullLanguageFolder);
         List<FileInfo> languageFiles = directoryinfo.GetFiles()
             .Where(f => f.Extension.Equals(".json", StringComparison.OrdinalIgnoreCase))
             .Select(f => f)
@@ -324,13 +349,13 @@ public class LocalizationManager : MonoBehaviour
         allCultures = new List<CultureData>();
         foreach (var lf in languageFiles)
         {
-            // TODO: Add error check
+            
             CultureInfo tempCultureInfo = CultureInfo.GetCultureInfo(Path.GetFileNameWithoutExtension(lf.FullName));
             allCultures.Add(new CultureData() { culture = tempCultureInfo, filePath = lf.FullName });
         }
 
         if (allCultures.Count == 0)
-            throw new LocalizationException("Couldn't find any languages", languagesFolder);
+            throw new LocalizationException("Couldn't find any languages", fullLanguageFolder);
     }
 
     List<object> GetDynamicParts(DynamicVariables dynamicParts)
@@ -382,7 +407,7 @@ public class LocalizationManager : MonoBehaviour
     {
         allKeys.Add(key);
         string rawTranslation = localizationHandler.GetRawTranslation(key);
-        if (dp.dynamicVariables.Count == 0) return rawTranslation;
+        if (dp==null || dp.dynamicVariables.Count == 0) return rawTranslation;
 
         return TurnDynamicsIntoText(rawTranslation, dp.dynamicVariables);
     }
@@ -578,6 +603,7 @@ public class LocalizationManager : MonoBehaviour
 
     public static LocalizeUIText AddLocalizedUITextComponent(GameObject g, string key, params object[] DynamicParts)
     {
+        
         if (g == null || key == null)
         {
             Debug.LogError("You must provide a game object and string which are not null");
@@ -592,6 +618,7 @@ public class LocalizationManager : MonoBehaviour
         lt.SetKey(key);
         lt.SetCodeCreated();
         if (DynamicParts.Length != 0) lt.SetDynamicVariables(DynamicParts.ToList());
+        
         g.SetActive(true);
 
         return lt;

@@ -8,7 +8,6 @@ public class AddLocalizedText : MonoBehaviour
 
     void Start()
     {
-        // TODO: Does not work
         LocalizationManager.AddLocalizedUITextComponent(textGameObject, "Hello World");
     }
 }

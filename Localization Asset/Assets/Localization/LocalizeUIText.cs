@@ -19,21 +19,29 @@ public class LocalizeUIText : MonoBehaviour
         "For each variable, you should provide its source and name.")]
     [SerializeField] private DynamicVariables variables = default;
 
-    public void OnEnable()
+    public void Start()
     {
-        try { GetTranslatedText(); }
+        try
+        {
+            GetTranslatedText();
+            LocalizationManager.Instance.OnLanguageChanged.AddListener(GetTranslatedText);
+        }
         catch (NullReferenceException)
         {
             var le = new LocalizationException(true);
             throw le;
         }
     }
-
+    public void OnDestroy()
+    {
+        LocalizationManager.Instance.OnLanguageChanged.RemoveListener(GetTranslatedText);
+    }
     private void AssignText(string text)
     {
         Component textComp = GetComponent<Text>();
         if (textComp == null) textComp = GetComponent<TextMeshProUGUI>();
         if (textComp == null) { Debug.LogError("You must place this script to a game object with Text or TextMeshPro component"); return; }
+
 
         if (string.IsNullOrEmpty(key)) return;
 
@@ -45,28 +53,29 @@ public class LocalizeUIText : MonoBehaviour
 
     private void GetTranslatedText()
     {
-        string text = dpForCode != null ? LocalizationManager.Instance.LocalizeThroughComponent(key, dpForCode) :
-            LocalizationManager.Instance.LocalizeThroughComponent(key, variables);
+        
+        string text = 
+            this.isCreatedByCode ? LocalizationManager.Instance.LocalizeThroughComponent(key, dpForCode) :
+                                    LocalizationManager.Instance.LocalizeThroughComponent(key, variables);
+
+        
         AssignText(text);
     }
 
-    public void InspectorCreatedUpdate()
-    {
-        if (this.isCreatedByCode)
-        {
-            Debug.LogError("This localization text is created by code. Update this localized text from CodeCreatedUpdate");
-            return;
-        }
-        GetTranslatedText();
-    }
+
+    
 
     #region CreatedByCode
-    public void CodeCreatedUpdate(params object[] a)
+    public void UpdateText(params object[] a)
     {
         if (!this.isCreatedByCode)
         {
-            Debug.LogError("This localization text is not created by code. Update this localized text from InspectorCreatedUpdate");
-            return;
+            if(a.Length!=0)
+            {
+                Debug.LogError("Since this LocalizeUIText component is created via Inspector, you shouldn't send parameters (because parameters are already set in the inspector)" +
+                    "The parameters you sent will be disregarded");
+            }
+            GetTranslatedText();
         }
         if (dpForCode != null)
         {

@@ -380,8 +380,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugging: 0
   mainLanguageTag: en-US
-  languagesFolder: Assets/Localization/Demo/Languages
-  missingKeysFolder: Assets/Localization/Demo/Languages
+  LanguageFolder: Localization/Demo/Languages
+  MissingKeysFolder: Localization/Demo/MissingLanguages
   OnLanguageChanged:
     m_PersistentCalls:
       m_Calls: []
