@@ -1,9 +1,50 @@
-site_name: My Docs
+site_name: Localization Asset
 
 nav:
-    - Home: index.md
-    - About: about.md
-    - Contact: contact.md
+    - Welcome: 
+        - Overview: index.md
+        - Demo: demo.md
+        - Contact: contact.md
+        - Changelog: changelog.md
+    - Installation: installation.md
+    - How Localization Works In General: how_localization_works.md
+    - Initial Setup: 
+        - Localization Manager: localization_manager.md
+        - Scene Load: scene_load.md
+    - Working with Language Files:
+        - Creating and Editing Language Files: creating_and_editing_language_files.md
+        - Debugging Features: debugging_features_for_language_files.md
+    - Localizing Text in Game: 
+        - Using Localize UI Text Component: using_localize_ui_text_component.md
+        - Retrieving Localized Text Manually: retrieving_localized_text_manually.md
 
 theme:
   name: material
+  palette:
+    primary: blue
+    accent: light blue
+
+  icon:
+    logo: material/library
+  #favicon: img/favicon.ico
+  
+  features:
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 2
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/restinjoy2
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/epiphanyatnight
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/channel/UCDjGcerrcQBK0wMLlT3sovQ
+
+copyright: Copyright &copy; 2020 - Rest in Joy & Epiphany at Night
