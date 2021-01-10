@@ -1,17 +1,13 @@
-# Welcome to MkDocs
+# Welcome
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Localization Asset is a Unity asset that eases the localization process for you with a *minimalistic* and *practical* approach. You can purchase the asset from  [Unity Asset Store](https://www).
 
-## Commands
+See [Rest in Joy's YouTube channel](https://www.youtube.com/channel/UCDjGcerrcQBK0wMLlT3sovQ) for a video tutorial on using this asset as well as many other tutorials on game development and Unity.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## Features
+- 
 
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## Core Components
+- **Localization Manager**: Handles all localization-related tasks in the scene.
+- **Localization Editor**: Assists with creating and editing the language files.
+- **Localize UI Text**: A component that is added to any GameObject and localizes the Text or Text Mesh Pro component of that GameObject based on the given key and variables (if any).
