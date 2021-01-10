@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -19,8 +17,10 @@ public static class DataFinder
     public static object GetData(UnityEngine.Object ScriptorcomponentorSO, string Name)
     {
         Type type;
-        
+
+#pragma warning disable CS0184 // 'is' expression's given expression is never of the provided type
         if (ScriptorcomponentorSO is MonoScripts) // If a script is dragged. thus, a singleton
+#pragma warning restore CS0184 // 'is' expression's given expression is never of the provided type
         {
             MonoScript Script = ScriptorcomponentorSO as MonoScript;
             type = Script.GetClass();
@@ -36,7 +36,6 @@ public static class DataFinder
             }
 
             throw new LocalizationException("The script " + Script.name + " doesn't have a singleton (No Property called \"Instance\" or \"instance\". )\n");
-            
         }
         else if (ScriptorcomponentorSO is ScriptableObject) 
         {
