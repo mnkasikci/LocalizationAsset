@@ -502,7 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8471f273c2e3924e83c7b211f08c10a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: Hello World
+  key: Player Health
   variables:
     list:
     - variableSource: {fileID: 1333373945}
