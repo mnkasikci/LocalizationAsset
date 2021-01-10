@@ -32,15 +32,17 @@ public class LocalizationManager : MonoBehaviour
 
     [Header("Language Selection")]
     [Tooltip("Enter the language tag from ISO 639-1 classification. See here for " +
-        "the tags: https://en.wikipedia.org/wiki/Language_localisation#Language_tags_and_codes. " +
+        "the tags: http://docwiki.embarcadero.com/RADStudio/Sydney/en/Language_Culture_Names,_Codes,_and_ISO_Values. " +
         "For instance, use 'en-US' for American English and 'en-GB' for British English. " +
         "Remember that a language file with the exact same name should exist in the languages folder.")]
     [SerializeField] private string mainLanguageTag;
     private string chosenCultureName;
     [Header("File Paths")]
-    [Tooltip("Language file will be retrieved from this folder. The path is relative to your 'Assets' " +
-        "folder. So '/Languages' means 'Assets/Languages'.")]
+    [Tooltip("Language file will be retrieved from this folder. The path is relative to your Assets " +
+        "folder. So 'Languages' means 'Assets/Languages'. Do not start the path with '/' because" +
+        "then the path will not be relative to your Assets folder.")]
     [SerializeField] private string languagesFolder;
+    // TODO: Make this relative to assets folder
     [Tooltip("When another script requests the localized text for a key and Localization Manager cannot find that value," +
         "it will log these keys to this folder so that you can see which keys were missing / not translated for that language.")]
     [SerializeField] private string missingKeysFolder;
@@ -86,7 +88,7 @@ public class LocalizationManager : MonoBehaviour
 
     public async Task StartupLanguageActionsAsync()
     {
-        GetAvailableLanguages();
+        GetAvailableLanguageFiles();
         
         try
         {
@@ -215,7 +217,7 @@ public class LocalizationManager : MonoBehaviour
     /// Checks whether main, system and current langauge files are broken and reconstructs the choices.
     /// <para>If it is impossible to reconstruct, throws an error.</para>
     /// </summary>
-    public async Task ChooseLanguage(int newLanguageIndex)
+    private async Task ChooseLanguage(int newLanguageIndex)
     {
         Task MLA = MakeLanguageAvailable(newLanguageIndex);
         chosenCultureName = allCultures[newLanguageIndex].culture.Name;
@@ -223,6 +225,33 @@ public class LocalizationManager : MonoBehaviour
         currentLanguageIndex = newLanguageIndex;
         OnLanguageChanged.Invoke() ;
         localizationHandler.ConstructPriorityList();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<string, string> GetAvailableLanguages()
+    {
+        Dictionary<string, string> names = new Dictionary<string, string>();
+        foreach (var item in allCultures)
+            names.Add(item.culture.NativeName, item.culture.Name);
+
+        return names;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="languageTag"></param>
+    /// <returns></returns>
+    public async Task ChooseLanguage(string languageTag)
+    {
+        int index = allCultures.IndexOf(allCultures.Find(f => f.culture.Name == languageTag));
+        if (index == -1) Debug.LogError("The given culture name could not be found in the available " +
+            "languages. Either there is no language file or the language file is corrupted.");
+
+        await ChooseLanguage(index);
     }
 
     private async Task MakeLanguageAvailable(params int[] Indexes)
@@ -284,7 +313,7 @@ public class LocalizationManager : MonoBehaviour
         return -1;
     }
 
-    public void GetAvailableLanguages()
+    public void GetAvailableLanguageFiles()
     {
         DirectoryInfo directoryinfo = new DirectoryInfo(languagesFolder);
         List<FileInfo> languageFiles = directoryinfo.GetFiles()
@@ -323,7 +352,20 @@ public class LocalizationManager : MonoBehaviour
         return DynamicValues;
     }
 
-    public string GetLocalizedValue(string key, DynamicVariables dp)
+    public string GetLocalizedValue(string key, params object[] variables)
+    {
+        allKeys.Add(key);
+        string rawTranslation = localizationHandler.GetRawTranslation(key);
+        if (variables.Length == 0) return rawTranslation;
+        List<object> DynamicValues = variables.ToList();
+
+        return TurnDynamicsIntoText(rawTranslation, DynamicValues);
+    }
+
+    /// <summary>
+    /// Do not use this method manually. This is intended for the localization via LocalizeUIText component.
+    /// </summary>
+    public string LocalizeThroughComponent(string key, DynamicVariables dp)
     {
         allKeys.Add(key);
         string rawTranslation = localizationHandler.GetRawTranslation(key);
@@ -333,14 +375,16 @@ public class LocalizationManager : MonoBehaviour
         return TurnDynamicsIntoText(rawTranslation, DynamicValues);
     }
 
-    public string GetLocalizedValue(string key, DynamicVarsForCode dp)
+    /// <summary>
+    /// Do not use this method manually. This is intended for the localization via LocalizeUIText component.
+    /// </summary>
+    public string LocalizeThroughComponent(string key, DynamicVarsForCode dp)
     {
         allKeys.Add(key);
         string rawTranslation = localizationHandler.GetRawTranslation(key);
         if (dp.dynamicVariables.Count == 0) return rawTranslation;
 
         return TurnDynamicsIntoText(rawTranslation, dp.dynamicVariables);
-
     }
 
     private string TurnDynamicsIntoText(string textwithNumbers, List<object> DynamicValues)
@@ -530,5 +574,26 @@ public class LocalizationManager : MonoBehaviour
             }
             throw new KeyNotFoundException();
         }
+    }
+
+    public static LocalizeUIText AddLocalizedUITextComponent(GameObject g, string key, params object[] DynamicParts)
+    {
+        if (g == null || key == null)
+        {
+            Debug.LogError("You must provide a game object and string which are not null");
+            return null;
+        }
+        if (g.GetComponent<LocalizeUIText>() != null) return null;
+
+        g.SetActive(false);
+
+        LocalizeUIText lt = g.AddComponent<LocalizeUIText>();
+
+        lt.SetKey(key);
+        lt.SetCodeCreated();
+        if (DynamicParts.Length != 0) lt.SetDynamicVariables(DynamicParts.ToList());
+        g.SetActive(true);
+
+        return lt;
     }
 }

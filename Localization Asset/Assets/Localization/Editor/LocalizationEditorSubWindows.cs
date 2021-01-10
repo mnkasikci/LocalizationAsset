@@ -56,7 +56,7 @@ public class LocalizationEditItemWindow : EditorWindow
 
         if (GUILayout.Button("Save"))
         {
-            if (LocalizationEditorHelper.GetLocalizedValue(key) != string.Empty && oldKey != key) // Replace key
+            if (GetWindow<LocalizationEditor>().IsKeyAlreadyInLocalizationData(key) == true && oldKey != key) // Replace key
                 ConfirmReplaceLocalizationItem();
             else // Save edited key
             {
@@ -123,7 +123,7 @@ public class LocalizationAddItemWindow : EditorWindow
 
         if (GUILayout.Button("Add"))
         {
-            if (LocalizationEditorHelper.GetLocalizedValue(key) != string.Empty) // Replace key
+            if (GetWindow<LocalizationEditor>().IsKeyAlreadyInLocalizationData(key) == true) // Replace key
                 ConfirmReplaceLocalizationItem();
             else // Add key
             {

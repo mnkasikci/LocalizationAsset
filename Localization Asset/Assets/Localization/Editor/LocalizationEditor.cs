@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -118,8 +119,6 @@ public class LocalizationEditor : EditorWindow
         tempItem.key = key;
         tempItem.value = value;
         localizationData.items.Add(tempItem);
-
-        LocalizationEditorHelper.localizedText.Add(key, value);
     }
 
     public void ReplaceLocalizationItemWithKey(string key, string value)
@@ -129,7 +128,6 @@ public class LocalizationEditor : EditorWindow
             if (item.key == key)
             {
                 item.value = value;
-                LocalizationEditorHelper.localizedText[key] = value;
                 break;
             }
         }
@@ -143,8 +141,6 @@ public class LocalizationEditor : EditorWindow
             {
                 item.key = newKey;
                 item.value = newValue;
-                LocalizationEditorHelper.localizedText.Remove(oldKey);
-                LocalizationEditorHelper.localizedText.Add(newKey, newValue);
                 break;
             }
         }
@@ -153,9 +149,15 @@ public class LocalizationEditor : EditorWindow
     public void DeleteLocalizationItem(LocalizationItem item)
     {
         localizationData.items.Remove(item);
-        LocalizationEditorHelper.localizedText.Remove(item.key);
     }
 
+    public bool IsKeyAlreadyInLocalizationData(string key)
+    {
+        if (localizationData.items.Any(f => f.key == key))
+            return true;
+        else 
+            return false;
+    }
     #endregion
 
     #region File Methods
@@ -170,16 +172,7 @@ public class LocalizationEditor : EditorWindow
         {
             string dataAsJson = File.ReadAllText(openedFilePath);
             localizationData = JsonUtility.FromJson<LocalizationData>(dataAsJson);
-            SyncWithLocalizationEditorHelper();
         }
-    }
-
-    public void SyncWithLocalizationEditorHelper()
-    {
-
-        LocalizationEditorHelper.localizedText = new Dictionary<string, string>();
-        foreach (LocalizationItem item in localizationData.items)
-            LocalizationEditorHelper.localizedText.Add(item.key, item.value);
     }
 
     void SaveLocalizationData()
@@ -211,7 +204,6 @@ public class LocalizationEditor : EditorWindow
     {
         localizationData = new LocalizationData();
         localizationData.items = new List<LocalizationItem>();
-        LocalizationEditorHelper.localizedText = new Dictionary<string, string>();
     }
     #endregion
 

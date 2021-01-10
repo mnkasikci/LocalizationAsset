@@ -45,8 +45,8 @@ public class LocalizeUIText : MonoBehaviour
 
     private void GetTranslatedText()
     {
-        string text = dpForCode != null ? LocalizationManager.Instance.GetLocalizedValue(key, dpForCode) :
-            LocalizationManager.Instance.GetLocalizedValue(key, variables);
+        string text = dpForCode != null ? LocalizationManager.Instance.LocalizeThroughComponent(key, dpForCode) :
+            LocalizationManager.Instance.LocalizeThroughComponent(key, variables);
         AssignText(text);
     }
 
@@ -120,25 +120,5 @@ public class DynamicVarsForCode
 
 public static class LocalizationTextCreator
 {
-    public static LocalizeUIText Add(GameObject g, string key, params object[] DynamicParts)
-    {
-
-        if (g == null || key == null)
-        {
-            Debug.LogError("You must provide a game object and string which are not null");
-            return null;
-        }
-        if (g.GetComponent<LocalizeUIText>() != null) return null;
-
-        g.SetActive(false);
-
-        LocalizeUIText lt = g.AddComponent<LocalizeUIText>();
-
-        lt.SetKey(key);
-        lt.SetCodeCreated();
-        if (DynamicParts.Length != 0) lt.SetDynamicVariables(DynamicParts.ToList());
-        g.SetActive(true);
-
-        return lt;
-    }
+    
 }
