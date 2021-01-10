@@ -1,17 +1,19 @@
-# Welcome to MkDocs
+# Creating and Editing Language Files
+Use `Localization Editor` custom window to create and edit language files. You can access `Localization Editor` from the Tools menu:
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+![Accessing Localization Editor](img/accessing_localization_editor.png)
 
-## Commands
+Once the editor is open, you can load language files or create a new language file. If you click on `Create New`, a new language file will be created and then you will be able to add key and value pairs to it. Remember that the language file should exactly match the language tags so for American English, the language file should be named `en-US`.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+![First Screen Localization Editor](img/first_screen_localization_editor.png)
 
-## Project layout
+The rest is self-explanatory: 
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+- You can add a new key and value pair by clicking on `Add New Item`.
+- You can edit an existing key and value pair by clicking on `Edit` next to that item.
+- You can search keys and values in the search bar at the top of the window.
+- You can use file methods like save, save as, load, or create new at the bottom of the window.
+
+![Localization Editor Window](img/localization_editor_window.png)
+
+All language files are serialized (saved) in JSON format. 

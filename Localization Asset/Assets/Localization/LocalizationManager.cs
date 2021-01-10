@@ -601,7 +601,7 @@ public class LocalizationManager : MonoBehaviour
         }
     }
 
-    public static LocalizeUIText AddLocalizedUITextComponent(GameObject g, string key, params object[] DynamicParts)
+    public static LocalizeUIText AddLocalizeUIText(GameObject g, string key, params object[] DynamicParts)
     {
         
         if (g == null || key == null)

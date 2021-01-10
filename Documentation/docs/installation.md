@@ -1,17 +1,7 @@
-# Welcome to MkDocs
+# Installation
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+After you purchase the asset from the Unity Asset Store, it will appear in the [package manager](https://docs.unity3d.com/2020.2/Documentation/Manual/upm-ui.html). You can access the package manager from *Window > Package Manager*. Once the window is open, make sure you are viewing *Packages: My Assets* as the Localization Asset will be listed there. Select Localization Asset and click the *Import* button located at the bottom right corner. 
 
-## Commands
+![Make sure you are viewing *Packages: My Assets* in the Package Manager](img/package_manager.png)
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Once the import is completed, you can access the Localization Editor from the Tools menu, add Localize UI Text component in the inspector, and use the Localization Manager in the scene.

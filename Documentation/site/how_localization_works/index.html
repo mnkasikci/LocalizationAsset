@@ -14,7 +14,7 @@
     
     
       
-        <title>How Localization Works - Localization Asset</title>
+        <title>How Localization Works In General - Localization Asset</title>
       
     
     
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-mkdocs" class="md-skip">
+        <a href="#how-localization-works" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +94,7 @@
         <div class="md-header-nav__topic">
           <span class="md-ellipsis">
             
-              How Localization Works
+              How Localization Works In General
             
           </span>
         </div>
@@ -198,7 +198,20 @@
 
   <li class="md-nav__item">
     <a href=".." class="md-nav__link">
-      About
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../demo/" class="md-nav__link">
+      Demo
     </a>
   </li>
 
@@ -263,12 +276,12 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        How Localization Works
+        How Localization Works In General
         <span class="md-nav__icon md-icon"></span>
       </label>
     
     <a href="./" class="md-nav__link md-nav__link--active">
-      How Localization Works
+      How Localization Works In General
     </a>
     
       
@@ -285,15 +298,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
+  <a href="#language-files" class="md-nav__link">
+    Language Files
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#project-layout" class="md-nav__link">
-    Project layout
+  <a href="#localization-dictionaries" class="md-nav__link">
+    Localization Dictionaries
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-language-files" class="md-nav__link">
+    Loading Language Files
   </a>
   
 </li>
@@ -311,10 +331,52 @@
 
 
 
-  <li class="md-nav__item">
-    <a href="../initial_setup/" class="md-nav__link">
+  
+  <li class="md-nav__item md-nav__item--nested">
+    
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" data-md-state="indeterminate" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
       Initial Setup
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Initial Setup" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        Initial Setup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../localization_manager/" class="md-nav__link">
+      Localization Manager
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../scene_load/" class="md-nav__link">
+      Scene Load
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -453,15 +515,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
+  <a href="#language-files" class="md-nav__link">
+    Language Files
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#project-layout" class="md-nav__link">
-    Project layout
+  <a href="#localization-dictionaries" class="md-nav__link">
+    Localization Dictionaries
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-language-files" class="md-nav__link">
+    Loading Language Files
   </a>
   
 </li>
@@ -479,21 +548,38 @@
               
                 
                 
-                <h1 id="welcome-to-mkdocs">Welcome to MkDocs<a class="headerlink" href="#welcome-to-mkdocs" title="Permanent link">&para;</a></h1>
-<p>For full documentation visit <a href="https://www.mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
-<ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
-</ul>
-<h2 id="project-layout">Project layout<a class="headerlink" href="#project-layout" title="Permanent link">&para;</a></h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
+                <h1 id="how-localization-works">How Localization Works<a class="headerlink" href="#how-localization-works" title="Permanent link">&para;</a></h1>
+<p>This will be a primer on how a localization system works in general so you can get the most out of Localization Asset.</p>
+<h2 id="language-files">Language Files<a class="headerlink" href="#language-files" title="Permanent link">&para;</a></h2>
+<p>For each language you will need a file that contains the text in that language. For instance, you might have a file for English and another file for German. The important thing is that you keep translations separate and organize them by language. You do not mix English and German translations in a single file. </p>
+<h2 id="localization-dictionaries">Localization Dictionaries<a class="headerlink" href="#localization-dictionaries" title="Permanent link">&para;</a></h2>
+<p>Dictionaries hold key and value pairs. For instance, the key can be "Warm Hello" and the value can be "Hi friend, how are you doing?" This allows you to give the key to the dictionary and request the corresponding value.</p>
+<p>Dictionaries are widely used in localization. Each language file acts essentially like a dictionary and the keys are the same throughout all language files. This data structure allows you to use the same key with different language files to retrieve the localized version in the intended language.</p>
+<p>See the below example:</p>
+<table>
+<thead>
+<tr>
+<th>Language File</th>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>English</td>
+<td>Warm Hello</td>
+<td>Hi friend, how are you doing?</td>
+</tr>
+<tr>
+<td>German</td>
+<td>Warm Hello</td>
+<td>Hallo Freund, wie geht es dir?</td>
+</tr>
+</tbody>
+</table>
+<h2 id="loading-language-files">Loading Language Files<a class="headerlink" href="#loading-language-files" title="Permanent link">&para;</a></h2>
+<p>There is something special with loading language files. You need to make sure that the language files are loaded and ready to give out values before you load any scene in your game. Otherwise, if the localization files are not loaded properly, the objects in the scene will fail to obtain the localized texts and the result will be localization chaos.</p>
+<p>This is why any localization asset should alert you when it loaded the language files and that you can proceed with loading your scenes.</p>
                 
               
               
@@ -527,13 +613,13 @@ docs/
           </a>
         
         
-          <a href="../initial_setup/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../localization_manager/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Initial Setup
+                Localization Manager
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

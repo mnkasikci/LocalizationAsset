@@ -2,12 +2,15 @@ site_name: Localization Asset
 
 nav:
     - Welcome: 
-        - About: index.md
+        - Overview: index.md
+        - Demo: demo.md
         - Contact: contact.md
         - Changelog: changelog.md
     - Installation: installation.md
-    - How Localization Works: how_localization_works.md
-    - Initial Setup: initial_setup.md
+    - How Localization Works In General: how_localization_works.md
+    - Initial Setup: 
+        - Localization Manager: localization_manager.md
+        - Scene Load: scene_load.md
     - Working with Language Files:
         - Creating and Editing Language Files: creating_and_editing_language_files.md
         - Debugging Features: debugging_features_for_language_files.md

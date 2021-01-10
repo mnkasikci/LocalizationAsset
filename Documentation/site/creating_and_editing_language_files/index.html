@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-mkdocs" class="md-skip">
+        <a href="#creating-and-editing-language-files" class="md-skip">
           Skip to content
         </a>
       
@@ -198,7 +198,20 @@
 
   <li class="md-nav__item">
     <a href=".." class="md-nav__link">
-      About
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../demo/" class="md-nav__link">
+      Demo
     </a>
   </li>
 
@@ -255,7 +268,7 @@
 
   <li class="md-nav__item">
     <a href="../how_localization_works/" class="md-nav__link">
-      How Localization Works
+      How Localization Works In General
     </a>
   </li>
 
@@ -266,10 +279,52 @@
 
 
 
-  <li class="md-nav__item">
-    <a href="../initial_setup/" class="md-nav__link">
+  
+  <li class="md-nav__item md-nav__item--nested">
+    
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" data-md-state="indeterminate" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
       Initial Setup
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Initial Setup" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        Initial Setup
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../localization_manager/" class="md-nav__link">
+      Localization Manager
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
+    <a href="../scene_load/" class="md-nav__link">
+      Scene Load
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -314,45 +369,9 @@
       
     
     
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Creating and Editing Language Files
-        <span class="md-nav__icon md-icon"></span>
-      </label>
-    
     <a href="./" class="md-nav__link md-nav__link--active">
       Creating and Editing Language Files
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#project-layout" class="md-nav__link">
-    Project layout
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
     
   </li>
 
@@ -448,28 +467,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#project-layout" class="md-nav__link">
-    Project layout
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -481,21 +478,20 @@
               
                 
                 
-                <h1 id="welcome-to-mkdocs">Welcome to MkDocs<a class="headerlink" href="#welcome-to-mkdocs" title="Permanent link">&para;</a></h1>
-<p>For full documentation visit <a href="https://www.mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
+                <h1 id="creating-and-editing-language-files">Creating and Editing Language Files<a class="headerlink" href="#creating-and-editing-language-files" title="Permanent link">&para;</a></h1>
+<p>Use <code>Localization Editor</code> custom window to create and edit language files. You can access <code>Localization Editor</code> from the Tools menu:</p>
+<p><img alt="Accessing Localization Editor" src="../img/accessing_localization_editor.png" /></p>
+<p>Once the editor is open, you can load language files or create a new language file. If you click on <code>Create New</code>, a new language file will be created and then you will be able to add key and value pairs to it. Remember that the language file should exactly match the language tags so for American English, the language file should be named <code>en-US</code>.</p>
+<p><img alt="First Screen Localization Editor" src="../img/first_screen_localization_editor.png" /></p>
+<p>The rest is self-explanatory: </p>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
+<li>You can add a new key and value pair by clicking on <code>Add New Item</code>.</li>
+<li>You can edit an existing key and value pair by clicking on <code>Edit</code> next to that item.</li>
+<li>You can search keys and values in the search bar at the top of the window.</li>
+<li>You can use file methods like save, save as, load, or create new at the bottom of the window.</li>
 </ul>
-<h2 id="project-layout">Project layout<a class="headerlink" href="#project-layout" title="Permanent link">&para;</a></h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
+<p><img alt="Localization Editor Window" src="../img/localization_editor_window.png" /></p>
+<p>All language files are serialized (saved) in JSON format. </p>
                 
               
               
@@ -514,7 +510,7 @@ docs/
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../initial_setup/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../scene_load/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -523,7 +519,7 @@ docs/
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Initial Setup
+                Scene Load
               </div>
             </div>
           </a>
