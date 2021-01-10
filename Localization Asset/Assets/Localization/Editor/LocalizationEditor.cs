@@ -120,6 +120,9 @@ public class LocalizationEditor : EditorWindow
 
     string GetLanguageTagFromPath(string path)
     {
+        if (string.IsNullOrEmpty(path))
+            return "No language selected";
+
         int lastPathIndex = path.LastIndexOf('/');
         int extensionIndex = path.LastIndexOf('.');
         return path.Substring(lastPathIndex + 1, extensionIndex - lastPathIndex - 1);

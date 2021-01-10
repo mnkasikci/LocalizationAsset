@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 2560
     height: 1357
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Project
   m_RootView: {fileID: 3}
   m_MinSize: {x: 875, y: 792}
   m_MaxSize: {x: 10000, y: 10000}
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_MinSize: {x: 694, y: 742}
   m_MaxSize: {x: 14644, y: 14042}
   vertical: 1
-  controlID: 152
+  controlID: 25
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_MinSize: {x: 401, y: 221}
   m_MaxSize: {x: 8001, y: 4021}
   vertical: 0
-  controlID: 153
+  controlID: 26
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_MinSize: {x: 694, y: 521}
   m_MaxSize: {x: 14644, y: 10021}
   vertical: 0
-  controlID: 122
+  controlID: 120
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -387,9 +387,9 @@ MonoBehaviour:
   localizationData:
     items:
     - key: Hello World
-      value: "Merhaba d\xFCnya. Yerelle\u015Ftirme \xF6nemlidir."
+      value: Hello world. Localization is important.
     - key: Player Health
-      value: "Oyuncunun can\u0131 \u015Fu anda {0}."
+      value: Player health is currently {0}.
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -684,9 +684,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 8c490000
-      m_LastClickedID: 0
-      m_ExpandedIDs: d2e3ffffeee5ffff8ee6ffffecedffff0ef0ffff2cf0ffffcaf0ffffbcf5fffffaf5ffff8ef6ffffbcf6ffffccf6ffffb6f7ffff14f8ffff44fbffff505200009a52000078570000de58000034590000205d0000445d0000
+      m_SelectedIDs: 8a3f0000
+      m_LastClickedID: 16266
+      m_ExpandedIDs: 44faffff44fbfffff4ffffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -800,8 +800,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SkipHidden: 0
     m_SearchArea: 1
-    m_Folders:
-    - Assets/Localization/Demo
+    m_Folders: []
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 0
@@ -815,7 +814,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: b23f0000
     m_LastClickedID: 16306
-    m_ExpandedIDs: 00000000da3f0000dc3f0000de3f0000e03f0000e23f0000e43f0000
+    m_ExpandedIDs: 00000000da3f0000dc3f0000de3f0000e03f0000e23f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -843,21 +842,21 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff00000000da3f0000dc3f0000de3f0000e43f00000a400000
+    m_ExpandedIDs: ffffffff00000000da3f0000dc3f0000de3f0000e03f0000e23f00000c400000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Actual Scene
-      m_OriginalName: Actual Scene
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 16634
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 13}
     m_SearchString: 
