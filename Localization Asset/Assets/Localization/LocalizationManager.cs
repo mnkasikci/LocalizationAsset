@@ -112,9 +112,9 @@ public class LocalizationManager : MonoBehaviour
         if (Instance.debugging)
         {
             Debug.Log("Localization Completed");
-            Debug.Log("cl = " + allCultures[currentLanguageIndex].culture.Name);
-            Debug.Log("dl = " + allCultures[systemLanguageIndex].culture.Name);
-            Debug.Log("ml = " + allCultures[mainLanguageIndex].culture.Name);
+            Debug.Log("Current Language = " + allCultures[currentLanguageIndex].culture.Name);
+            Debug.Log("Default (System) Language = " + allCultures[systemLanguageIndex].culture.Name);
+            Debug.Log("Main Language = " + allCultures[mainLanguageIndex].culture.Name);
         }
     }
 
