@@ -381,7 +381,7 @@ MonoBehaviour:
   debugging: 0
   mainLanguageTag: en-US
   LanguageFolder: Localization/Demo/Languages
-  MissingKeysFolder: Localization/Demo/MissingLanguages
+  MissingKeysFolder: Localization/Demo/MissingKeys
   OnLanguageChanged:
     m_PersistentCalls:
       m_Calls: []

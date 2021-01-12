@@ -46,6 +46,8 @@ public class LocalizationManager : MonoBehaviour
     [SerializeField] private string LanguageFolder;
     private string fullLanguageFolder;
 
+    private List<FileInfo> languageFiles;
+
     [Tooltip("When another script requests the localized text for a key and Localization Manager cannot find that value," +
         "it will log these keys to this folder so that you can see which keys were missing / not translated for that language.")]
     [SerializeField] private string MissingKeysFolder;
@@ -79,6 +81,7 @@ public class LocalizationManager : MonoBehaviour
     private static bool ValidateCreateNewLanguageFileWithUsedKeys() => Application.isPlaying;
     #endregion
 
+
     #region Methods
     private bool AnyLanguageIsUnavailable() =>
         (allCultures[currentLanguageIndex].IsBroken ||
@@ -96,6 +99,7 @@ public class LocalizationManager : MonoBehaviour
     {
         fullLanguageFolder = Path.Combine(Application.dataPath, LanguageFolder);
         fullMissingKeysFolder = Path.Combine(Application.dataPath, MissingKeysFolder);
+
 
         GetAvailableLanguageFiles();
 
@@ -116,6 +120,9 @@ public class LocalizationManager : MonoBehaviour
             Debug.Log("Default (System) Language = " + allCultures[systemLanguageIndex].culture.Name);
             Debug.Log("Main Language = " + allCultures[mainLanguageIndex].culture.Name);
         }
+
+
+
     }
 
     /// <summary>
@@ -153,39 +160,99 @@ public class LocalizationManager : MonoBehaviour
             Instance.chosenCultureName = "";
         }
     }
-
-    private async Task<bool> SaveAllMissingKeys()
+    private void BackupCurrentMissingkeysFile(string path)
     {
-        if (allCultures == null) return false;
+        string pathWOExtension = Path.GetFileNameWithoutExtension(path);
+        int newFileIndex = -1;
+        for (int i = 2; i <= 100; i++)
+            if (!File.Exists(pathWOExtension + $"({i}).json") && !File.Exists(pathWOExtension + $"({i}).JSON"))
+            {
+                newFileIndex = i;
+                break;
+            }
+        if (newFileIndex == -1)
+        {
+            Debug.LogError("Too many broken files, current missing keys file won't be backed up");
+            return;
+        }
+        try
+        {
+            string newBackupFileName = pathWOExtension + $"({newFileIndex}).json";
+            string newSecondBackupFileName = pathWOExtension + $"({newFileIndex})(2).json";
+            File.Replace(path, newBackupFileName, newSecondBackupFileName);
+        }
+        catch
+        {
+            Debug.LogError("Current missing keys file can not be replaced. Please close the app using the file and try again.");
+
+        }
+
+    }
+
+    private async Task SaveAndUpdateAllMissingKeys()
+    {
+        
+        if (allCultures == null) return;
         Directory.CreateDirectory(fullMissingKeysFolder);
 
-        List<Task> filesToWrite = new List<Task>();
-
-        foreach (var item in allCultures)
+        foreach (var culture in allCultures)
         {
-            HashSet<string> missingKeys = item.MissingKeys;
-            if (missingKeys == null) continue;
+            
+            HashSet<string> missingKeys = culture.MissingKeys!=null? culture.MissingKeys : new HashSet<string>();
 
+            string missingKeysPath = Path.Combine(fullMissingKeysFolder, culture.culture.Name + ".json");
             LocalizationData localizationData = new LocalizationData();
-            localizationData.items = new List<LocalizationItem>();
-            foreach (var key in missingKeys)
-                localizationData.items.Add(new LocalizationItem() { key = key, value = "" });
-
-            string jsonString = JsonUtility.ToJson(localizationData);
-            string missingKeysPath = Path.Combine(fullMissingKeysFolder, item.culture.Name + ".json");
-            File.WriteAllText(missingKeysPath, jsonString);
-
-            StreamWriter sw = new StreamWriter(missingKeysPath);
-            filesToWrite.Add(sw.WriteAsync(jsonString));
+            
+            //Checking if there is a file for missing keys already and merging with current missing keys
+            if (File.Exists(missingKeysPath))
+            {
+                try
+                {
+                    string tempJson = File.ReadAllText(missingKeysPath);
+                    LocalizationData tempLD = JsonUtility.FromJson<LocalizationData>(tempJson);
+                    if(!culture.IsLoadingOrLoaded) await culture.LoadDictionary();
+                    foreach (var entry in tempLD)
+                        if(!culture.HasKey(entry.key))
+                            missingKeys.Add(entry.key);
+                }
+                catch
+                {
+                    Debug.LogWarning($"Couldn't read missing keys file \"{missingKeysPath}\"." +
+                        $"The file will renamed to \"{missingKeysPath}(number)\" and current missing keys will be saved in this name");
+                    BackupCurrentMissingkeysFile(missingKeysPath);
+                }
+            }
+            if(missingKeys.Count!=0)
+            {
+                localizationData.items = new List<LocalizationItem>();
+                foreach (var key in missingKeys)
+                    localizationData.items.Add(new LocalizationItem() { key = key, value = "" });
+                string jsonString = JsonUtility.ToJson(localizationData);
+                File.WriteAllText(missingKeysPath, jsonString);
+            }
+            else if (File.Exists(missingKeysPath))
+            {
+                try
+                {
+                    File.Delete(missingKeysPath);
+                    File.Delete(missingKeysPath + ".meta");
+                    if(debugging)
+                        Debug.Log($"File \"{missingKeysPath}\" is removed because no missing keys left in that culture.");
+                }
+                catch
+                {
+                    Debug.LogWarning($"Tried to delete \"{missingKeysPath}\" because there was no missing keys left for that culture.\n" +
+                        $" However, access denied. You can remove the file manually.");
+                }
+            }
         }
-        await Task.WhenAll(filesToWrite);
 
-        return true;
     }
 
     private async void OnApplicationQuit()
     {
-        await SaveAllMissingKeys();
+        
+        await SaveAndUpdateAllMissingKeys();
     }
 
     /// <summary>
@@ -338,7 +405,7 @@ public class LocalizationManager : MonoBehaviour
     public void GetAvailableLanguageFiles()
     {
         DirectoryInfo directoryinfo = new DirectoryInfo(fullLanguageFolder);
-        List<FileInfo> languageFiles = directoryinfo.GetFiles()
+        languageFiles = directoryinfo.GetFiles()
             .Where(f => f.Extension.Equals(".json", StringComparison.OrdinalIgnoreCase))
             .Select(f => f)
             .ToList();
@@ -347,8 +414,18 @@ public class LocalizationManager : MonoBehaviour
         foreach (var lf in languageFiles)
         {
 
-            CultureInfo tempCultureInfo = CultureInfo.GetCultureInfo(Path.GetFileNameWithoutExtension(lf.FullName));
-            allCultures.Add(new CultureData() { culture = tempCultureInfo, filePath = lf.FullName });
+            try
+            {
+                CultureInfo tempCultureInfo = CultureInfo.GetCultureInfo(Path.GetFileNameWithoutExtension(lf.FullName));
+                allCultures.Add(new CultureData() { culture = tempCultureInfo, filePath = lf.FullName });
+            }
+            catch (CultureNotFoundException ce)
+            {
+                Debug.LogError($"The culture {ce.InvalidCultureName} is not a valid culture name.\n" +
+                    $"It will not be added to the available languages. Please check {ce.HelpLink} for more information.\n" +
+                    $"If you still can't find the solution, please contact us at https://ymansurozer.github.io/LocalizationAssetDocumentation/contact/");
+            }
+
         }
 
         if (allCultures.Count == 0)
@@ -566,14 +643,16 @@ public class LocalizationManager : MonoBehaviour
             {
                 try
                 {
-                    StreamReader sr = new StreamReader(this.filePath);
-                    string dataasJson = await sr.ReadToEndAsync();
-
-                    LocalizationData localizationData = JsonUtility.FromJson<LocalizationData>(dataasJson);
-                    foreach (var item in localizationData)
+                    using (StreamReader sr = new StreamReader(this.filePath))
                     {
-                        try { this.dictionary.Add(item.key, item.value); }
-                        catch (ArgumentException e) { if (Instance.debugging) Debug.LogWarning(e.Message + " this entry will be disregarded"); }
+                        string dataasJson = await sr.ReadToEndAsync();
+
+                        LocalizationData localizationData = JsonUtility.FromJson<LocalizationData>(dataasJson);
+                        foreach (var item in localizationData)
+                        {
+                            try { this.dictionary.Add(item.key, item.value); }
+                            catch (ArgumentException e) { if (Instance.debugging) Debug.LogWarning(e.Message + " this entry will be disregarded"); }
+                        }
                     }
                 }
 
@@ -587,16 +666,22 @@ public class LocalizationManager : MonoBehaviour
             else
                 throw new LocalizationException("Localization file not found", this.filePath);
         }
-
+        internal bool HasKey(string key)
+        {
+            if (dictionary == null) throw new LocalizationException($"The dictionary has not been loaded but you tried to access the key \'{key}\'");
+            return dictionary.ContainsKey(key);
+        }
         internal string GetValue(string key)
         {
-            if (dictionary.ContainsKey(key))
+            if (dictionary == null) throw new LocalizationException($"The dictionary has not been loaded but you tried to access the key \'{key}\'");
+            if (HasKey(key))
                 return dictionary[key];
             if (Instance.debugging)
             {
                 Debug.LogWarning("The key \"" + key + "\" couldn't be found  in the language dictionary \"" +
                     this.culture.Name + "\". It will be added to the missing keys");
             }
+            AddMissingKey(key);
             throw new KeyNotFoundException();
         }
     }

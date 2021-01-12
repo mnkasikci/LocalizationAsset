@@ -1141,7 +1141,6 @@ GameObject:
   - component: {fileID: 658636264}
   - component: {fileID: 658636263}
   - component: {fileID: 658636262}
-  - component: {fileID: 658636265}
   m_Layer: 5
   m_Name: Update
   m_TagString: Untagged
@@ -1213,9 +1212,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 658636265}
+      - m_Target: {fileID: 284377891}
         m_TargetAssemblyTypeName: UpdateLocalizedText, Assembly-CSharp
-        m_MethodName: UpdateText
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1263,19 +1262,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 658636260}
   m_CullTransparentMesh: 1
---- !u!114 &658636265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 658636260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c97c1f5a316534089d08de553e0bcd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localizeUITextComponent: {fileID: 284377893}
 --- !u!1 &775997380
 GameObject:
   m_ObjectHideFlags: 0
