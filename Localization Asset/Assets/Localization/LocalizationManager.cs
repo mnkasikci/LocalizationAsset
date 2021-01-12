@@ -608,7 +608,7 @@ public class LocalizationManager : MonoBehaviour
                 catch { }
 
             }
-            return "";
+            return "Missing Key: " + key;
         }
     }
 
