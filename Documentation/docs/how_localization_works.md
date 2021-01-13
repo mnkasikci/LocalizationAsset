@@ -1,6 +1,6 @@
 # How Localization Works
 
-This will be a primer on how a localization system works in general so you can get the most out of Localization Asset.
+This will be a primer on how a localization system works in general so you can get the most out of Quick Localization.
 
 ## Language Files
 For each language you will need a file that contains the text in that language. For instance, you might have a file for English and another file for German. The important thing is that you keep translations separate and organize them by language. You do not mix English and German translations in a single file. 

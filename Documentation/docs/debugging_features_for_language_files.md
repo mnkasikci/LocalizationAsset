@@ -14,3 +14,5 @@ You can create an empty language file with all the keys used in the game by goin
 ![Used Keys Menu](img/debugging_used_keys.png)
 
 For instance, you might be working on a prototype where you do not want to invest any time in sorting out the translation just yet. In that case, you can just use any key you would like and when you run the game, you can create a language file with all the keys used.
+
+Note that this feature only works in Play Mode.

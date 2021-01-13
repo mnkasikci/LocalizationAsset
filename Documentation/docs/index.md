@@ -1,6 +1,6 @@
 # Overview
 
-Localization Asset is a Unity asset that eases the localization process for you with a *minimalistic* and *practical* approach. You can purchase the asset from  [Unity Asset Store](https://www).
+Quick Localization is a Unity asset that eases the localization process for you with a *minimalistic* and *practical* approach. You can purchase the asset from  [Unity Asset Store](https://www).
 
 See [Rest in Joy's YouTube channel](https://www.youtube.com/channel/UCDjGcerrcQBK0wMLlT3sovQ) for a video tutorial on using this asset as well as many other tutorials on game development and Unity.
 
