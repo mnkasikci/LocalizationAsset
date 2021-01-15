@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Localization/Demo/Startup Scene.unity
+- path: Assets/QuickLocalization/Demo/Startup Scene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
